@@ -33,32 +33,43 @@ def signUp():
                 print('Invalid password, password should be alphanumeric and min of 6 chars')
                 password = raw_input('Enter your password again: ')
             else:
-                print('user created successfully!, you can now login')
                 user = User(name, email, pwd_context.encrypt(password))
                 Store.users.append(user)
+                print('user created successfully!, you can now login')
 
 def login():
-    name = input('Enter your name: ')
-    password = input('Enter your password: ')
+    name = raw_input('Enter your name: ')
+    password = raw_input('Enter your password: ')
 
     current_user = User().get_by_username(name)
 
-    if not current_user and password != current_user.password:
-        return 'User does not exist, please create an account'
-    print('You were successfully logged in {}'.format(name))
-    return name
+    while current_user == None:
+        print('Incorrect username')
+        name = raw_input('Enter your name: ')
+    else:
+        while not pwd_context.verify(current_user.password, password):
+            print('Wrong password, please enter the correct password')
+            password = raw_input('Enter your password: ')
+        else:
+            print('You were successfully logged in {}'.format(name))
+            return name
 
 def create_comment():
     author = login()
-    message = input('Enter your comment: ')
+    message = raw_input('Enter your comment: ')
 
-    comment = Comments(message, author)
+    while not re.match("^[a-zA-Z0-9]$", message):
+        print('Please enter a valid comment.')
+        message = raw_input('Enter your comment: ')
+    else:
+        comment = Comments(message, author)
+        Store.comments.append(comment.__dict__)
+        print('comment successfully created')
 
-    Store.comments.append(comment)
-    comments = [comment.to_dict() for comment in Store.comments]
-    print(comments)
-    return 'comment created'
+def show_comments():
+    print(Store.comments)
 
 if __name__ == '__main__':
     signUp()
     create_comment()
+    show_comments()
