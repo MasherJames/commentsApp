@@ -18,49 +18,49 @@ def create_moderate():
     Store.users.append(moderator)
 
 def signUp():
-    username = raw_input('Enter your username: ')
+    username = input('Enter your username: ')
     while not re.match("^[a-zA-Z0-9]{4,}$", username):
         print('Invalid username,username should be alphanumeric and min of 6 chars')
-        name = raw_input('Enter your name again: ')
+        name = input('Enter your name again: ')
     else:
-        email = raw_input('Enter your email: ')
+        email = input('Enter your email: ')
         while not re.match("^[^@]+@[^@]+\.[^@]+$", email):
             print('Invalid email')
-            email = raw_input('Enter your email again: ')
+            email = input('Enter your email again: ')
         else:
-            password = raw_input('Enter your password: ')
+            password = input('Enter your password: ')
             while not re.match("^[a-zA-Z0-9]{4,}$", password):
                 print('Invalid password, password should be alphanumeric and min of 6 chars')
-                password = raw_input('Enter your password again: ')
+                password = input('Enter your password again: ')
             else:
                 user = User(name, email, pwd_context.encrypt(password))
                 Store.users.append(user)
                 print('user created successfully!, you can now login')
 
 def login():
-    name = raw_input('Enter your name: ')
-    password = raw_input('Enter your password: ')
+    name = input('Enter your name: ')
+    password = input('Enter your password: ')
 
     current_user = User().get_by_username(name)
 
     while current_user == None:
         print('Incorrect username')
-        name = raw_input('Enter your name: ')
+        name = input('Enter your name: ')
     else:
         while not pwd_context.verify(current_user.password, password):
             print('Wrong password, please enter the correct password')
-            password = raw_input('Enter your password: ')
+            password = input('Enter your password: ')
         else:
             print('You were successfully logged in {}'.format(name))
             return name
 
 def create_comment():
     author = login()
-    message = raw_input('Enter your comment: ')
+    message = input('Enter your comment: ')
 
     while not re.match("^[a-zA-Z0-9]$", message):
         print('Please enter a valid comment.')
-        message = raw_input('Enter your comment: ')
+        message = input('Enter your comment: ')
     else:
         comment = Comments(message, author)
         Store.comments.append(comment.__dict__)
