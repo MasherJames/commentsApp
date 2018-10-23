@@ -21,7 +21,7 @@ def signUp():
     username = input('Enter your username: ')
     while not re.match("^[a-zA-Z0-9]{4,}$", username):
         print('Invalid username,username should be alphanumeric and min of 6 chars')
-        name = input('Enter your name again: ')
+        username = input('Enter your username again: ')
     else:
         email = input('Enter your email: ')
         while not re.match("^[^@]+@[^@]+\.[^@]+$", email):
@@ -33,32 +33,32 @@ def signUp():
                 print('Invalid password, password should be alphanumeric and min of 6 chars')
                 password = input('Enter your password again: ')
             else:
-                user = User(name, email, pwd_context.encrypt(password))
+                user = User(username, email, pwd_context.encrypt(password))
                 Store.users.append(user)
                 print('user created successfully!, you can now login')
 
 def login():
-    name = input('Enter your name: ')
+    username = input('Enter your username: ')
     password = input('Enter your password: ')
 
-    current_user = User().get_by_username(name)
+    current_user = User().get_by_username(username)
 
     while current_user == None:
         print('Incorrect username')
-        name = input('Enter your name: ')
+        username = input('Enter your username again: ')
     else:
-        while not pwd_context.verify(current_user.password, password):
+        while not pwd_context.verify(password, current_user.password):
             print('Wrong password, please enter the correct password')
             password = input('Enter your password: ')
         else:
-            print('You were successfully logged in {}'.format(name))
-            return name
+            print('You were successfully logged in {}'.format(username))
+            return username
 
 def create_comment():
     author = login()
     message = input('Enter your comment: ')
 
-    while not re.match("^[a-zA-Z0-9]$", message):
+    while not re.match("^[a-zA-Z0-9 ]{5,}$", message):
         print('Please enter a valid comment.')
         message = input('Enter your comment: ')
     else:
